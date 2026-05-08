@@ -1,0 +1,17 @@
+# ── Directories ──
+data_path: "/home/pdavies/Documents/Cumulus_Project/project/data/raw"      # Local raw directory
+output_dir: "/home/pdavies/Documents/Cumulus_Project/project/data/plots" # Where final PNGs are saved
+log_dir: "../logs"
+
+# ── Pipeline Run Parameters ──
+start_date: "2026-03-01"
+threshold: 1.0           # mm/day (less than this is dry)
+week_start: "Mon"        # 'Mon' or 'Sun'
+dpi: 150
+
+# ── Spatial Crop (Ghana/West Africa Default) ──
+bbox: [-5.0, 3.0, 4.0, 12.0]  # [lon_min, lon_max, lat_min, lat_max]
+
+# ── Earthdata Shortname ──
+short_name: "GPM_3IMERGDL" # GPM IMERG Late/Final Run Daily
+version: "07"
