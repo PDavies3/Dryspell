@@ -8,7 +8,11 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 with open(os.path.join(BASE_DIR, "config.yaml"), "r") as f:
     config = yaml.safe_load(f)
 
-RAW_DATA_DIR = config["data_path"]
+# DYNAMIC OVERRIDE: If running on GitHub Actions, bypass the yaml path!
+if os.environ.get("GITHUB_ACTIONS") == "true":
+    RAW_DATA_DIR = os.path.abspath(os.path.join(BASE_DIR, "../data/raw"))
+else:
+    RAW_DATA_DIR = config["data_path"]
 os.makedirs(RAW_DATA_DIR, exist_ok=True)
 
 def download_latest_imerg(days_back=5):
