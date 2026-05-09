@@ -170,8 +170,21 @@ def plot_week(week_label: str, arrays: list, lats: np.ndarray, lons: np.ndarray,
 
 def run_processor():
     """Main execution block triggered by scheduler or manual CLI run"""
+    # Load central configuration
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    with open(os.path.join(BASE_DIR, "config.yaml"), "r") as f:
+        config = yaml.safe_load(f)
+
+    # DYNAMIC PATH OVERRIDE: Check if running on GitHub Actions
+    if os.environ.get("GITHUB_ACTIONS") == "true":
+        data_path = os.path.abspath(os.path.join(BASE_DIR, "../data/raw"))
+        output_dir = os.path.abspath(os.path.join(BASE_DIR, "../data/plots"))
+    else:
+        data_path = config["data_path"]
+        output_dir = config["output_dir"]
+
     print("\n[1/3] Loading climate dataset...")
-    da = load_imerg(config["data_path"], config["start_date"])
+    da = load_imerg(data_path, config["start_date"])
     lats, lons = da.lat.values, da.lon.values
     season_t0 = pd.Timestamp(str(da.time.values[0])[:10])
 
@@ -193,7 +206,8 @@ def run_processor():
         map_7day = count_dry_spells(arr_season, min_length=7, threshold=config["threshold"]) if arr_season is not None else np.zeros_like(map_3day)
         map_10day = count_dry_spells(arr_season, min_length=10, threshold=config["threshold"]) if arr_season is not None else np.zeros_like(map_3day)
 
-        fpath = plot_week(label, [map_3day, map_7day, map_10day], lats, lons, config["output_dir"])
+        # Uses the dynamically defined output_dir
+        fpath = plot_week(label, [map_3day, map_7day, map_10day], lats, lons, output_dir)
         saved_plots.append(fpath)
         print(f"  [{i}/{len(weeks)}] Saved: {os.path.basename(fpath)}")
     
