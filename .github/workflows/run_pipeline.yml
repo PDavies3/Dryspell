@@ -16,7 +16,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    # 2. Set up Python Environment (Removing 'cache: pip' so it never fails on requirements.txt)
+    # 2. Set up Python Environment (No caching configured to avoid requirements.txt error)
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
@@ -40,13 +40,13 @@ jobs:
         echo "machine urs.earthdata.nasa.gov login ${{ secrets.EARTHDATA_USERNAME }} password ${{ secrets.EARTHDATA_PASSWORD }}" > ~/.netrc
         chmod 600 ~/.netrc
 
-    # 6. Create local raw directories so scripts don't fail looking for paths
+    # 6. Create local directories so scripts don't fail looking for paths
     - name: Pre-create paths
       run: |
         mkdir -p data/raw
         mkdir -p data/plots
 
-    # 7. Run download and processing scripts
+    # 7. Run download and processing scripts (Running processor.py)
     - name: Execute Pipeline
       run: |
         python app/downloader.py
@@ -55,8 +55,8 @@ jobs:
     # 8. Check if there are new PNGs, commit them, and push them back to GitHub
     - name: Save Plots to Repo
       run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action Bot"
+        git config --local user.email "patrickdavies94.pd@gmail.com"
+        git config --local user.name "PDavies3"
         git add data/plots/
         git diff-index --quiet HEAD || git commit -m "Auto-update dry spell plots"
         git push
