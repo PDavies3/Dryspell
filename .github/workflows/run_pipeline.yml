@@ -7,6 +7,10 @@ on:
   # Allows you to click a button and trigger the pipeline manually anytime
   workflow_dispatch:
 
+env:
+  # Resolves the Node.js 20 deprecation warning by forcing Node 24
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
 jobs:
   run-pipeline:
     runs-on: ubuntu-latest
@@ -16,7 +20,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    # 2. Set up Python Environment (Cache completely disabled)
+    # 2. Set up Python Environment (Cache input completely removed!)
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
@@ -55,8 +59,8 @@ jobs:
     # 8. Check if there are new PNGs, commit them, and push them back to GitHub
     - name: Save Plots to Repo
       run: |
-        git config --local user.email "patrickdavies94.pd@gmail.com"
-        git config --local user.name "PDavies3"
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action Bot"
         git add data/plots/
         git diff-index --quiet HEAD || git commit -m "Auto-update dry spell plots"
         git push
