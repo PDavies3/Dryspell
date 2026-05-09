@@ -1,8 +1,7 @@
-# ── Directories ──
-data_path: "/home/pdavies/Documents/Cumulus_Project/project/data/raw"      # Local raw directory
-output_dir: "/home/pdavies/Documents/Cumulus_Project/project/data/plots" # Where final PNGs are saved
-log_dir: "../logs"
-
+# Directory Paths (Relative to the project execution environment)
+data_path: "data/raw"      # Raw IMERG NetCDF files directory
+output_dir: "data/plots"   # Output directory for processed weekly PNGs
+log_dir: "logs"            # Log directory for diagnostic tracking
 # ── Pipeline Run Parameters ──
 start_date: "2026-03-01"
 threshold: 1.0           # mm/day (less than this is dry)
