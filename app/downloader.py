@@ -13,6 +13,8 @@ if os.environ.get("GITHUB_ACTIONS") == "true":
     RAW_DATA_DIR = os.path.abspath(os.path.join(BASE_DIR, "../data/raw"))
 else:
     RAW_DATA_DIR = config["data_path"]
+    
+# Create directory safely
 os.makedirs(RAW_DATA_DIR, exist_ok=True)
 
 def download_latest_imerg(days_back=5):
@@ -22,13 +24,11 @@ def download_latest_imerg(days_back=5):
     print(f"[{datetime.now()}] Starting IMERG auto-downloader...")
     
     try:
-        # Authenticate using your pre-saved ~/.netrc credentials
         earthaccess.login()
     except Exception as e:
         print(f"Authentication failed: {e}")
         return False
 
-    # Define timezone-aware temporal query window to avoid Python 3.13 deprecation warnings
     end_date = datetime.now(timezone.utc)
     start_date = end_date - timedelta(days=days_back)
     
@@ -48,8 +48,6 @@ def download_latest_imerg(days_back=5):
         return False
 
     print(f"Found {len(results)} remote files. Commencing download...")
-    
-    # Download files (earthaccess automatically skips already existing files)
     downloaded_files = earthaccess.download(results, local_path=RAW_DATA_DIR)
     
     print(f"[{datetime.now()}] Download process finished.")
