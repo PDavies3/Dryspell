@@ -16,7 +16,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    # 2. Set up Python Environment (No caching configured to avoid requirements.txt error)
+    # 2. Set up Python Environment (Cache completely disabled)
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
@@ -46,7 +46,7 @@ jobs:
         mkdir -p data/raw
         mkdir -p data/plots
 
-    # 7. Run download and processing scripts (Running processor.py)
+    # 7. Run download and processing scripts
     - name: Execute Pipeline
       run: |
         python app/downloader.py
